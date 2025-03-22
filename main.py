@@ -11,7 +11,14 @@ app = marimo.App(
 def _():
     import marimo as mo
     from utils import load_electron_photon_dataset, create_transform, show_image
-    return create_transform, load_electron_photon_dataset, mo, show_image
+    from models import ResNet15_v1
+    return (
+        ResNet15_v1,
+        create_transform,
+        load_electron_photon_dataset,
+        mo,
+        show_image,
+    )
 
 
 @app.cell
@@ -37,6 +44,13 @@ def _(
 def _(show_image, train_loader):
     show_image(train_loader.dataset[3][0]), show_image(train_loader.dataset[-3][0])
     return
+
+
+@app.cell
+def _(ResNet15_v1):
+    model = ResNet15_v1()
+    model.summary()
+    return (model,)
 
 
 @app.cell
