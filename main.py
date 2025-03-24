@@ -10,14 +10,23 @@ app = marimo.App(
 @app.cell
 def _():
     import marimo as mo
+
+    import torch.optim as optim
+    import torch.nn as nn
+
     from utils import load_electron_photon_dataset, create_transform, show_image
     from models import ResNet15_v1
+    from train import train, evaluate_model
     return (
         ResNet15_v1,
         create_transform,
+        evaluate_model,
         load_electron_photon_dataset,
         mo,
+        nn,
+        optim,
         show_image,
+        train,
     )
 
 
@@ -35,7 +44,7 @@ def _(
     photon_dataset_path,
 ):
     train_loader, val_loader, test_loader, transform = load_electron_photon_dataset(
-        electron_dataset_path, photon_dataset_path, (0.70, 0.15, 0.15), 512
+        electron_dataset_path, photon_dataset_path, (0.20, 0.10, 0.70), 512
     )
     return test_loader, train_loader, transform, val_loader
 
@@ -49,8 +58,21 @@ def _(show_image, train_loader):
 @app.cell
 def _(ResNet15_v1):
     model = ResNet15_v1()
-    model.summary()
+    model.summary(batch_size=512)
     return (model,)
+
+
+@app.cell
+def _(model, nn, train, train_loader, val_loader):
+    train(
+        model=model,
+        epochs=10,
+        criterion=nn.CrossEntropyLoss(),
+        train_loader=train_loader,
+        val_loader=val_loader,
+        lr=1e-3,
+    )
+    return
 
 
 @app.cell
