@@ -69,5 +69,5 @@ class ResNet15_v1(nn.Module):
         x = self.softmax(x)
         return x
 
-    def summary(self):
-        summary(ResNet15_v1(), input_size=(2, 32, 32), batch_size=-1)
+    def summary(self, batch_size:int=-1):
+        summary(ResNet15_v1(), input_size=(2, 32, 32), batch_size=batch_size)
