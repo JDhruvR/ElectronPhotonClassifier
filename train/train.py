@@ -7,7 +7,7 @@ from tqdm import tqdm
 from .evaluate import evaluate_model
 from utils.visualization import show_loss, show_accuracy
 
-def train(model:nn.Module, epochs:int, criterion:nn.Module, train_loader:DataLoader, val_loader:DataLoader, device='cpu', lr:float=1e-4):
+def train(model:nn.Module, epochs:int, criterion:nn.Module, train_loader:DataLoader, val_loader:DataLoader, device='cuda', lr:float=1e-4):
     """
     Trains the given model using the dataset provided by the dataloader using Adam and given criterion, lr, and epochs on the given device type. Uses validation dataset to also track validation metrics. Plots the metrics calculated using plt.
 
@@ -67,7 +67,7 @@ def train(model:nn.Module, epochs:int, criterion:nn.Module, train_loader:DataLoa
         )
 
         #Validation
-        loss, accuracy = evaluate_model(model, val_loader, criterion)
+        loss, accuracy = evaluate_model(model, val_loader, criterion, device=device)
 
         eval_loss.append(loss)
         eval_accuracy.append(accuracy)

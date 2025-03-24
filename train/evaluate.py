@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-def evaluate_model(model:nn.Module, dataloader:DataLoader, criterion:nn.Module, device:str='cpu', dataset_name:str='validation'):
+def evaluate_model(model:nn.Module, dataloader:DataLoader, criterion:nn.Module, device:str='cuda', dataset_name:str='validation'):
     """
     Evaluate model over the data in Dataloader.
 
