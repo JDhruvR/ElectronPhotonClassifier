@@ -41,6 +41,11 @@ def show_loss(training_loss: list, validation_loss: list):
         validation_loss: Optional list of validation loss values per epoch
     """
 
+    # Convert tensors to CPU if they're on GPU
+    training_loss = [loss.cpu().item() if torch.is_tensor(loss) else loss for loss in training_loss]
+    if validation_loss:
+        validation_loss = [loss.cpu().item() if torch.is_tensor(loss) else loss for loss in validation_loss]
+
     plt.figure(figsize=(10, 6))
     epochs = range(1, len(training_loss) + 1)
 
