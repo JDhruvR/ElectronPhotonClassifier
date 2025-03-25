@@ -70,7 +70,7 @@ class ResNet15_v1(nn.Module):
         return x
 
     def summary(self, batch_size:int=-1):
-            device = next(self.parameters()).device  # Get the device of the model
+            device = str(next(self.parameters()).device) # Get the device of the model
             # Create a new instance on the same device
             model = ResNet15_v1().to(device)
             summary(model, input_size=(2, 32, 32), batch_size=batch_size, device=device)
