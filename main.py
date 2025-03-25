@@ -44,7 +44,7 @@ def _(
     photon_dataset_path,
 ):
     train_loader, val_loader, test_loader, transform = load_electron_photon_dataset(
-        electron_dataset_path, photon_dataset_path, (0.20, 0.10, 0.70), 512
+        electron_dataset_path, photon_dataset_path, (0.01, 0.01, 0.98), 512
     )
     return test_loader, train_loader, transform, val_loader
 
@@ -64,14 +64,7 @@ def _(ResNet15_v1):
 
 @app.cell
 def _(model, nn, train, train_loader, val_loader):
-    train(
-        model=model,
-        epochs=10,
-        criterion=nn.CrossEntropyLoss(),
-        train_loader=train_loader,
-        val_loader=val_loader,
-        lr=1e-3,
-    )
+    train(model=model, epochs=2, criterion=nn.CrossEntropyLoss(), train_loader=train_loader, val_loader=val_loader, device='cpu', lr=1e-4)
     return
 
 
