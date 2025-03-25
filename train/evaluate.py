@@ -44,7 +44,7 @@ def evaluate_model(model:nn.Module, dataloader:DataLoader, criterion:nn.Module, 
 
     model.to(original_device)
 
-    avg_loss = total_loss / len(dataloader)
+    avg_loss = total_loss / len(dataloader.dataset)
     accuracy = 100.0 * correct / total
 
     print(f'Loss in {dataset_name} : {avg_loss}, Accuracy : {accuracy}')
