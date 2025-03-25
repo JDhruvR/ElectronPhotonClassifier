@@ -7,7 +7,7 @@ from tqdm import tqdm
 from .evaluate import evaluate_model
 from utils.visualization import show_loss, show_accuracy
 
-def train(model:nn.Module, epochs:int, criterion:nn.Module, train_loader:DataLoader, val_loader:DataLoader, device='cuda', lr:float=1e-4, scheduler_type=None):
+def train(model:nn.Module, epochs:int, criterion:nn.Module, train_loader:DataLoader, val_loader:DataLoader, weight_decay:float=0.0, device='cuda', lr:float=1e-4, scheduler_type=None):
     """
     Trains the given model using the dataset provided by the dataloader using Adam and given criterion, lr, and epochs on the given device type. Uses validation dataset to also track validation metrics. Plots the metrics calculated using plt.
 
@@ -24,7 +24,7 @@ def train(model:nn.Module, epochs:int, criterion:nn.Module, train_loader:DataLoa
     model.to(torch.device(device))
     model.train()
 
-    optimizer = optim.Adam(model.parameters(), lr=lr)
+    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     # Create the appropriate scheduler
     scheduler = create_scheduler(optimizer, scheduler_type, epochs)
 
