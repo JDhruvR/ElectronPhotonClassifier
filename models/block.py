@@ -59,6 +59,23 @@ class Block(nn.Module):
             num_features=out_channels
         )
 
+        #initialize weights
+        self._initialize_weights()
+
+    def _initialize_weights(self):
+        # Using built-in Kaiming initialization for conv layers
+        for m in [self.conv1, self.conv2, self.conv3, self.residual_conv]:
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+
+        # Initialize batch norm layers
+        for m in [self.batchnorm1, self.batchnorm2, self.batchnorm3, self.residual_bn]:
+            if isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+
     def forward(self, x):
         z = self.conv1(x)
         z = self.batchnorm1(z)
