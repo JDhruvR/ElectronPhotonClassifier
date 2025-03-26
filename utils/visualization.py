@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import torch
 import numpy as np
+from sklearn.metrics import roc_curve, auc
 
 def show_image(img_tensor, figsize=(10, 10)):
     """
@@ -87,4 +88,48 @@ def show_accuracy(training_accuracy: list, validation_accuracy: list):
     plt.legend(fontsize=10)
 
     plt.tight_layout()
+    plt.show()
+
+def plot_roc_curve(model, val_loader, device='cuda'):
+    """
+    Plot ROC curve for the validation set.
+
+    Args:
+        model: The trained neural network model
+        val_loader: Validation data loader
+        device: Device to run the predictions on
+    """
+    model.eval()
+    y_true = []
+    y_pred = []
+
+    with torch.no_grad():
+        for data, labels in val_loader:
+            data = data.to(device)
+            # Get model predictions
+            outputs = model(data)
+            # Convert from log probabilities to probabilities
+            probs = torch.exp(outputs)
+            # We want the probability for class 1 (usually photons in your case)
+            y_pred.extend(probs[:, 1].cpu().numpy())
+            y_true.extend(labels.cpu().numpy())
+
+    # Convert to numpy arrays
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+
+    # Calculate ROC curve and ROC area
+    fpr, tpr, thresholds = roc_curve(y_true, y_pred)
+    roc_auc = auc(fpr, tpr)
+
+    # Plot ROC curve
+    plt.figure()
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic')
+    plt.legend(loc="lower right")
     plt.show()
