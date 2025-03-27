@@ -72,7 +72,7 @@ def train(model:nn.Module, epochs:int, criterion:nn.Module, train_loader:DataLoa
 
         #Display Training Statistics
         print(
-            f"total_loss: {running_loss}, average loss: {avg_loss:.4f}, accuracy: {accuracy:.2f}, for epoch: {epoch + 1}"
+            f"total_loss: {running_loss}, average loss: {avg_loss:.8f}, accuracy: {accuracy:.2f}, for epoch: {epoch + 1}"
         )
 
         #Validation

@@ -15,10 +15,11 @@ def _():
     import torch.nn as nn
 
     from utils import load_electron_photon_dataset, create_transform, show_image
-    from models import ResNet15_v1
+    from models import ResNet15_v1, ResNet15_v2
     from train import train, evaluate_model
     return (
         ResNet15_v1,
+        ResNet15_v2,
         create_transform,
         evaluate_model,
         load_electron_photon_dataset,
@@ -56,15 +57,24 @@ def _(show_image, train_loader):
 
 
 @app.cell
-def _(ResNet15_v1):
-    model = ResNet15_v1()
+def _(ResNet15_v2):
+    model = ResNet15_v2()
     model.summary(batch_size=512)
     return (model,)
 
 
 @app.cell
 def _(model, nn, train, train_loader, val_loader):
-    train(model=model, epochs=2, criterion=nn.CrossEntropyLoss(), train_loader=train_loader, val_loader=val_loader, device='cpu', lr=1e-4)
+    train(
+        model=model,
+        epochs=5,
+        criterion=nn.CrossEntropyLoss(),
+        train_loader=train_loader,
+        val_loader=val_loader,
+        lr=1e-3,
+        device='cpu',
+        scheduler_type='plateau'
+    )
     return
 
 
