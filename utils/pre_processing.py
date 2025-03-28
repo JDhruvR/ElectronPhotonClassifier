@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 
 def process_data(dataset:Dataset):
     """
