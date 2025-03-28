@@ -99,6 +99,11 @@ def plot_roc_curve(model, val_loader, device='cuda'):
         val_loader: Validation data loader
         device: Device to run the predictions on
     """
+    if device == 'cuda' and not torch.cuda.is_available():
+        device = 'cpu'
+        print("CUDA not available, using CPU instead")
+
+    model.to(device)
     model.eval()
     y_true = []
     y_pred = []
